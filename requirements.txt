@@ -3,4 +3,4 @@ opencv-python-headless
 easyocr
 numpy
 Pillow
-google-generativeai
+google-genai
