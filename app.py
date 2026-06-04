@@ -14,7 +14,7 @@ st.title("Scribble to Digital")
 st.write("Convert messy handwritten notes or scribbles into clean digital notes and a structured to-do list.")
 
 # Sidebar for API Key (Fallback if env var not set)
-api_key = "AIzaSyD7LAjEuWIzXDyY5xluWbinVvb0ydhjQZk"
+api_key = "AQ.Ab8RN6Kpyy3uvLrgQDfh57uJDizdTPmLp7kVrKvVgkJ_3vejhw"
 if not api_key:
     st.error("GEMINI_API_KEY not found in environment variables.")
     st.stop()
@@ -75,7 +75,7 @@ if uploaded_file:
                 """
                 
                 response = client.models.generate_content(
-                    model="gemini-2.5-flash",
+                    model="gemini-2.5-flash-lite",
                     contents=[
                         types.Part.from_bytes(data=img_bytes, mime_type="image/jpeg"),
                         prompt
