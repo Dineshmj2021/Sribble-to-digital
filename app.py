@@ -8,23 +8,29 @@ from google import genai
 from google.genai import types
 
 # Page Config
+# Page Config
 st.set_page_config(page_title="Scribble to Digital", layout="wide")
 
 st.title("Scribble to Digital")
-st.write("Convert messy handwritten notes or scribbles into clean digital notes and a structured to-do list.")
+
+# Load OCR model
+get_ocr_reader()
 
 # Sidebar for API Key (Fallback if env var not set)
+if "GEMINI_API_KEY" not in st.secrets:
+    st.error("GEMINI_API_KEY not found in Streamlit Secrets.")
+    st.stop()
+
 api_key = st.secrets["GEMINI_API_KEY"]
 client = genai.Client(api_key=api_key)
-if not api_key:
-    st.error("GEMINI_API_KEY not found in environment variables.")
-    st.stop()
 
 uploaded_file = st.file_uploader("Upload handwritten image", type=["jpg", "png", "jpeg"])
 
 if uploaded_file:
     # Load image
     image = Image.open(uploaded_file)
+    # Resize large mobile photos
+    image.thumbnail((1200, 1200))
     img_array = np.array(image)
     
     col1, col2 = st.columns(2)
@@ -74,7 +80,7 @@ if uploaded_file:
                 """
                 
                 response = client.models.generate_content(
-                    model="gemini-2.5-flash",
+                    model="gemini-2.5-flash-lite",
                     contents=[
                         types.Part.from_bytes(data=img_bytes, mime_type="image/jpeg"),
                         prompt
@@ -82,9 +88,12 @@ if uploaded_file:
                 )
                 
                 st.subheader("Digital Output")
-                st.markdown(response.text)
+                if hasattr(response, "text") and response.text:
+                    st.markdown(response.text)
+                else:
+                    st.warning("No response returned from Gemini.")
                 
             except Exception as e:
-                st.error(f"An error occurred: {str(e)}")
+                st.exception(e)
 else:
     st.info("Please upload an image to get started.")
