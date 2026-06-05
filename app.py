@@ -14,7 +14,8 @@ st.title("Scribble to Digital")
 st.write("Convert messy handwritten notes or scribbles into clean digital notes and a structured to-do list.")
 
 # Sidebar for API Key (Fallback if env var not set)
-api_key = "AIzaSyBc7RtoPngIqTrQP535ttmOctWILqAet4I"
+api_key = st.secrets["GEMINI_API_KEY"]
+client = genai.Client(api_key=api_key)
 if not api_key:
     st.error("GEMINI_API_KEY not found in environment variables.")
     st.stop()
