@@ -31,12 +31,12 @@ if uploaded_file:
     
     with col1:
         st.subheader("Uploaded Image")
-        st.image(image, use_container_width=True)
+        st.image(image,width="stretch")
         
     with col2:
         st.subheader("Processed Image")
         processed_img = enhance_image(img_array)
-        st.image(processed_img, use_container_width=True)
+        st.image(processed_img, width="stretch")
         
     if st.button("Convert to Digital"):
         with st.spinner("Processing OCR and AI cleanup..."):
