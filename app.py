@@ -20,8 +20,6 @@ if not api_key:
     st.error("GEMINI_API_KEY not found in environment variables.")
     st.stop()
 
-client = genai.Client(api_key=api_key)
-
 uploaded_file = st.file_uploader("Upload handwritten image", type=["jpg", "png", "jpeg"])
 
 if uploaded_file:
